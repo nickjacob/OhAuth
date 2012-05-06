@@ -11,7 +11,7 @@ How about this -- here's your server js:
 
 
 	var cK = 'consumerKey', cS = 'consumerSecret'
-		, ohAuth = new OhAuth(strategies.twitter(cK,cS,'http://127.0.0.1:1337',app);
+		, ohAuth = new OhAuth(strategies.twitter(cK,cS,'http://127.0.0.1:1337'),app);
 
 	app.configure(function(){
 		app.use(app.router);	
