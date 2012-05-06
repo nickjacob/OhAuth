@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>OhAuth by nickjacob</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OhAuth</h1>
+        <p>The laziest OAuth for Express imagineable</p>
+        <p class="view"><a href="https://github.com/nickjacob/OhAuth">View the Project on GitHub <small>nickjacob/OhAuth</small></a></p>
+        <ul>
+          <li><a href="https://github.com/nickjacob/OhAuth/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/nickjacob/OhAuth/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/nickjacob/OhAuth">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>1. How Lazy?</h3>
+
+<p>How about this -- here's your server js:</p>
+
+<div class="highlight">
+<pre>    <span class="kd">var</span> <span class="nx">Express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">)</span>
+      <span class="p">,</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">Express</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">Express</span><span class="p">.</span><span class="nx">favicon</span><span class="p">(),</span><span class="nx">Express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">))</span>
+      <span class="p">,</span> <span class="nx">OhAuth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./ohauth'</span><span class="p">)</span>
+      <span class="p">,</span> <span class="nx">strategies</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./ohauth-strategies'</span><span class="p">);</span>
+
+
+    <span class="kd">var</span> <span class="nx">cK</span> <span class="o">=</span> <span class="s1">'consumerKey'</span><span class="p">,</span> <span class="nx">cS</span> <span class="o">=</span> <span class="s1">'consumerSecret'</span>
+        <span class="p">,</span> <span class="nx">ohAuth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OhAuth</span><span class="p">(</span><span class="nx">strategies</span><span class="p">.</span><span class="nx">twitter</span><span class="p">(</span><span class="nx">cK</span><span class="p">,</span><span class="nx">cS</span><span class="p">,</span><span class="s1">'http://127.0.0.1:1337'</span><span class="p">),</span><span class="nx">app</span><span class="p">);</span>
+
+    <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">);</span>    
+    <span class="p">});</span>
+
+    <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">1337</span><span class="p">);</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">sendfile</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/index.html'</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="c1">// when you're done, you'll get an access key and an access secret printing out here</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/oauth/success'</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">){</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">credentials</span><span class="p">);</span>
+    <span class="p">});</span>
+</pre>
+</div>
+
+
+<p>Now, after a little <code>node app.js</code>, just point your browser over to <code>localhost:1337/oauth/login</code></p>
+
+<h3>2. Wait, so it does everything for me?</h3>
+
+<p>Pretty much. It has some defaults that can be changed by passing new values (either in the strategy, or the dict if you're using your own).</p>
+
+<ul>
+<li>loginURL: <code>/oauth/login</code>
+</li>
+<li>callbackURL: <code>/oauth/callback</code>
+</li>
+<li>sucessURL: <code>/oauth/succecss</code>
+</li>
+<li>errorURL: <code>/oauth/error</code>
+</li>
+</ul><p>It sets up all of them except <em>success</em>, because I figured you'd probably want to implement it yourself. <code>/oauth/login</code> goes straight to twitter.</p>
+
+<h3>3. I want to make API calls..what do?</h3>
+
+<p>There are methods for GET and POST that just wrap the node-oauth library (what this whole things is wrapping). Check it out:</p>
+
+<h4>Get request:</h4>
+
+<div class="highlight">
+<pre>    <span class="nx">ohAuth</span><span class="p">.</span><span class="nx">get</span><span class="p">({</span> <span class="nx">accessToken</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span> <span class="nx">accessSecret</span><span class="o">:</span> <span class="s1">''</span> <span class="p">},</span><span class="nx">url</span><span class="p">,</span><span class="nx">params</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span><span class="nx">data</span><span class="p">,</span><span class="nx">response</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span> <span class="c1">// there's the return of the call</span>
+    <span class="p">});</span>
+
+</pre>
+</div>
+
+
+<h4>Post request:</h4>
+
+<div class="highlight">
+<pre>    <span class="nx">ohAuth</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span> <span class="nx">accessToken</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span> <span class="nx">accessSecret</span><span class="o">:</span> <span class="s1">''</span> <span class="p">},</span><span class="nx">url</span><span class="p">,</span><span class="nx">params</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span><span class="nx">data</span><span class="p">,</span><span class="nx">response</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span> <span class="c1">// there's the return of the call</span>
+    <span class="p">},</span><span class="nx">contentType</span><span class="p">);</span> <span class="c1">// contentType is an optional parameter..oh and params is optional too</span>
+
+</pre>
+</div>
+
+
+<h3>4. Giant Disclaimer</h3>
+
+<p>This is not fully tested, and probably has a lot of issue in the smaller details. It's really just a wrapper around oauth.js, and etc. and use at own risk etc. But if you want really quick and easy oauth and don't care much about configuration, here she is!</p>
+
+<h3>5. TODO</h3>
+
+<ol>
+<li><p>I'm adding the ability to bind to the event of getting the tokens, so you can store them in your database (they're still floating around on the req.session though, so you can always look there in the meantime)</p></li>
+<li><p>Testing testing testing </p></li>
+</ol><h3>6. Credits</h3>
+
+<p>This would do absolutely nothing without <a href="https://github.com/ciaranj/node-oauth">Ciaran Jessup's node-oauth</a></p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/nickjacob">nickjacob</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
