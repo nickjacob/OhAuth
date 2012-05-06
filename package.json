@@ -1,0 +1,32 @@
+{
+  "name": "ohauth",
+  "version": "0.1.0",
+  "description": "Really lazy OAuth 1.0 for express",
+  "keywords": [
+    "OAuth",
+    "Express",
+    "easy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": {
+    "name": "Nick Jacob",
+    "email": "me@nickjacob.com",
+    "url": "http://nickjacob.com"
+  },
+  "dependencies": {
+    "oauth": "0.X.X"
+  },
+  "main": "ohauth.js",
+  "engines": {
+    "node": ">= 0.5.0 < 0.7.X"
+  },
+  "_id": "ohauth@0.1.0",
+  "optionalDependencies": {},
+  "_engineSupported": "true",
+  "_npmVersion": "1.1.16",
+  "_nodeVersion": "v0.6.15"
+
+}
