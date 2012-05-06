@@ -50,8 +50,9 @@ There are methods for GET and POST that just wrap the node-oauth library (what t
 		console.log(response); // there's the return of the call
 	});
 
+```
 #### Post request:
-
+```javascript
 	ohAuth.post({ accessToken: '', accessSecret: '' },url,params,function(status,data,response){
 		console.log(response); // there's the return of the call
 	},contentType); // contentType is an optional parameter..oh and params is optional too
