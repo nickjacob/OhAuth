@@ -29,7 +29,7 @@ OhAuth.strategies = {
 		// return it for use in the constructor
 		return config;
 	},
-	socialflow: function(consumerKey,consumerSecret){
+	socialflow: function(consumerKey,consumerSecret,urls){
 		var config = {
 			requestURL: 'https://www.socialflow.com/oauth/request_token',
 			accessURL: 'https://www.socialflow.com/oauth/access_token',
@@ -39,10 +39,10 @@ OhAuth.strategies = {
 		};
 		if(typeof urls ==='object'){
 			config.loginURL = urls.loginURL;
-			config.callBackURL = urls.callBackURL;
+			config.callbackURL = urls.callbackURL;
 			config.successURL = urls.successURL;
 			config.errorURL = urls.errorURL;
-		}else config.callBackURL = urls; //it's just the necessary one		
+		}else config.rootURL = urls; //it's just the necessary one		
 		// return it for use in the constructor
 		return config;	
 	}
@@ -137,8 +137,8 @@ OhAuth.prototype = {
 	// methods for calling the API
 	get: function(cred,url,params,done){
 		if(typeof params ==='function') done = params; // params is optional
-		else url += __formatGet(params);
-		this.oa.get(url,cred.accessToken,cred.accessSecret,done);
+		else url += this.__formatGet(params);
+		return this.oa.get(url,cred.accessToken,cred.accessSecret,done);
 	},
 	post: function(cred,url,data,done,contentype){
 		if(typeof data==='function'){
@@ -146,7 +146,7 @@ OhAuth.prototype = {
 			done = data;
 		}
 		if(!contentype) var contentype = 'application/x-www-form-urlencoded';
-		this.oa.post(url,cred.accessToken,cred.accessSecret,data,contentype,done);
+		return this.oa.post(url,cred.accessToken,cred.accessSecret,data,contentype,done);
 	},
 	__formatGet: function(params){
 		var output = '?';
