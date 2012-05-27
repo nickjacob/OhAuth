@@ -3,7 +3,7 @@
 
 ### 1. How Lazy?
 How about this -- here's your server js:
-
+```javascript
 	var Express = require('express')
 	  , app = Express.createServer(Express.favicon(),Express.static(__dirname))
 	  , OhAuth = require('./ohauth')
@@ -11,7 +11,7 @@ How about this -- here's your server js:
 
 
 	var cK = 'consumerKey', cS = 'consumerSecret'
-		, ohAuth = new OhAuth(strategies.twitter(cK,cS,'http://127.0.0.1:1337',app);
+		, ohAuth = new OhAuth(strategies.twitter(cK,cS,'http://127.0.0.1:1337'),app);
 
 	app.configure(function(){
 		app.use(app.router);	
@@ -26,7 +26,7 @@ How about this -- here's your server js:
 	app.get('/oauth/success',function(req,res){
 		res.send(req.session.credentials);
 	});
-
+```
 Now, after a little `node app.js`, just point your browser over to `localhost:1337/oauth/login`
 
 
@@ -45,21 +45,28 @@ There are methods for GET and POST that just wrap the node-oauth library (what t
 
 #### Get request:
 
+```javascript
 	ohAuth.get({ accessToken: '', accessSecret: '' },url,params,function(status,data,response){
 		console.log(response); // there's the return of the call
 	});
 
+```
 #### Post request:
-
+```javascript
 	ohAuth.post({ accessToken: '', accessSecret: '' },url,params,function(status,data,response){
 		console.log(response); // there's the return of the call
 	},contentType); // contentType is an optional parameter..oh and params is optional too
 
-### 3. Giant Disclaimer
+```
+
+### 4. Giant Disclaimer
 This is not fully tested, and probably has a lot of issue in the smaller details. It's really just a wrapper around oauth.js, and etc. and use at own risk etc. But if you want really quick and easy oauth and don't care much about configuration, here she is!
 
-### 4. TODO
+### 5. TODO
 
 1. I'm adding the ability to bind to the event of getting the tokens, so you can store them in your database (they're still floating around on the req.session though, so you can always look there in the meantime)
 
 2. Testing testing testing 
+
+### 6. Credits
+This would do absolutely nothing without [Ciaran Jessup's node-oauth](https://github.com/ciaranj/node-oauth)
